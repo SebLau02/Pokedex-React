@@ -16,7 +16,7 @@ const theme = {
 	Spectre: "#7A72C2",
 	Plante: "#2C9E3A",
 	Dragon: "#1E64BA",
-	Ténèbre: "#504D60",
+	Ténèbres: "#504D60",
 };
 
 export default theme;
