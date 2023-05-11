@@ -2,24 +2,33 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 
 const rotate = keyframes`
-  from {
-    transform: rotate(0deg);
+  0% {
+    transform: rotate(-20deg) translateX(-7px);
   }
-
-  to {
-    transform: rotate(360deg);
+10%{
+    transform: rotate(0deg;)
+}
+20%{
+	transform:rotate(20deg) translateX(7px);
+}
+30%{
+    transform: rotate(0deg);
+}
+  100% {
+    transform: rotate(0deg);
   }
 `;
 
 const StyledLoader = styled.div`
 	border-radius: 50%;
-	animation: ${rotate} 1s infinite linear;
+	animation: ${rotate} 1s infinite ease-out;
 	height: 200px;
 	width: 200px;
 	background: linear-gradient(80deg, #871a22 10%, #ad4e56 70%, #a71f2a 98%);
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	border: 1px solid black;
 
 	@media (max-width: 425px) {
 		width: 150px;
