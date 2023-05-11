@@ -14,10 +14,12 @@ import Error from "../error/error";
 
 const StyledImagePokemon = styled.img`
 	width: 80%;
+	max-width: 40rem;
 	border-radius: 2rem;
 `;
 
 const StyledUlType = styled.ul`
+	width: 10rem;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -34,8 +36,7 @@ const StyledLi = styled.li`
 `;
 
 const StyledImgType = styled.img`
-	width: 10vw;
-	max-width: 70px;
+	width: 4rem;
 	height: auto;
 `;
 
@@ -54,7 +55,7 @@ const StyledCard = styled.article`
 
 	@media (max-width: 425px) {
 		width: 100%;
-		transition: width 2s;
+		transition: width 0.5s;
 	}
 `;
 
@@ -78,7 +79,6 @@ const StyledLinkWrapper = styled.div`
 	border: none;
 	border-top-left-radius: 1rem;
 	border-top-right-radius: 1rem;
-	// background-color: ${colors.darkBlue};
 	background: linear-gradient(
 		180deg,
 		${colors.darkBlue},
@@ -189,7 +189,7 @@ export default function Cards() {
 		<div>
 			{error ? (
 				<Error404 />
-			) : pokemonPokedexId > 151 ? (
+			) : pokemonPokedexId > 898 ? (
 				<Error />
 			) : isLoading ? (
 				<Loader />
@@ -211,7 +211,7 @@ export default function Cards() {
 								/>
 							)}
 
-							{suivant <= 151 ? (
+							{suivant <= 898 ? (
 								<Link to={`/pokemon/${suivant}`}>
 									<RightArrow
 										fill="#ffff"

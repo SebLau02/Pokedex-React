@@ -31,6 +31,7 @@ const StyledWrapper = styled.main`
 	align-items: center;
 	flex-direction: column;
 	width: 100%;
+	margin-top: 15vmin;
 	background-image: repeating-linear-gradient(
 			524deg,
 			transparent 0px,
@@ -63,19 +64,24 @@ const StyledLink = styled(Link)`
 	@media (max-width: 425px) {
 		width: 20vw;
 		height: auto;
-		transition: width 1s, height 1s;
+		transition: width 0.5s, height 0.5s;
 	}
 `;
 
 export default function Pokemon() {
-	const { data, isLoading } = useFetch(
-		`https://pokebuildapi.fr/api/v1/pokemon/generation/1`
-	);
+	const [filterGeneration, setFilterGeneration] = useState("Tout");
+	let apiUrl = "";
+	filterGeneration === "Tout"
+		? (apiUrl = "https://pokebuildapi.fr/api/v1/pokemon")
+		: (apiUrl = `https://pokebuildapi.fr/api/v1/pokemon/generation/${filterGeneration}`);
+
+	const { data, isLoading } = useFetch(apiUrl);
 	const listePokemon = data;
 
 	const [filterName, setFilterName] = useState("");
 
 	const [filterType, setFilterType] = useState("Tout");
+
 	const pokemonFiltrerByType = Object.values(listePokemon).filter((el) => {
 		return (
 			el.apiTypes[0]?.name === filterType ||
@@ -88,6 +94,7 @@ export default function Pokemon() {
 	filteredByName = Object.values(listePokemon).filter((pokemon) =>
 		pokemon.name.toLowerCase().match(filterName.toLowerCase())
 	);
+	console.log(listePokemon);
 
 	return (
 		<div>
@@ -101,6 +108,8 @@ export default function Pokemon() {
 						setFilterName={setFilterName}
 						listePokemon={listePokemon}
 						filteredByName={filteredByName}
+						filterGeneration={filterGeneration}
+						setFilterGeneration={setFilterGeneration}
 					/>
 
 					{filterType === "Tout" ? (

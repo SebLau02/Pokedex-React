@@ -7,7 +7,9 @@ const StyledSearchBar = styled.input`
 	border-radius: 1rem;
 	padding: 0.5rem;
 	width: 80%;
-	max-width: 50rem;
+	font-size: clamp(1rem, 2vw, 1.4rem);
+	max-width: 50vw;
+	height: 7vmin;
 `;
 
 const StyledSearchWrapper = styled.nav`
@@ -23,18 +25,32 @@ const StyledSelectWrapper = styled.div`
 	align-items: center;
 `;
 const StyledSelect = styled.select`
-	font-size: 1rem;
+	font-size: clamp(0.8rem, 1vw, 1.2rem);
+	border-radius: 5px;
 `;
-const StyledSearchglobalWrapper = styled.header`
+const StyledSearchGlobalWrapper = styled.header`
 	width: 100%;
+	height: 15vmin;
+	padding: 1vmax;
+	position: fixed;
+	top: 0;
+	left: 0;
 	background: linear-gradient(180deg, ${colors.darkBlue}, ${colors.beige});
-	padding: 1rem;
+`;
+
+const StyledPType = styled.p`
+	font-size: clamp(0.8rem, 2vw, 1.2rem);
+`;
+const StyledSelectContainer = styled.div`
+	padding: 1vmin;
 `;
 
 export default function SearchBar({
 	setFilterType,
 	filterName,
 	setFilterName,
+	filterGeneration,
+	setFilterGeneration,
 }) {
 	const { data } = useFetch(`https://pokebuildapi.fr/api/v1/types`);
 
@@ -42,9 +58,10 @@ export default function SearchBar({
 		e.preventDefault();
 		setFilterName(e.target.value);
 	};
+	const generationArray = ["Tout", "1", "2", "3", "4", "5", "6", "7", "8"];
 
 	return (
-		<StyledSearchglobalWrapper>
+		<StyledSearchGlobalWrapper>
 			<StyledSearchWrapper>
 				<StyledSearchBar
 					type="search"
@@ -55,12 +72,31 @@ export default function SearchBar({
 			</StyledSearchWrapper>
 
 			<StyledSelectWrapper>
-				<div>
-					<p>Type:</p>
+				<StyledSelectContainer>
+					<StyledPType>Génération:</StyledPType>
+
+					<StyledSelect
+						name="Génération"
+						id="pokemon-gen-select"
+						onChange={(e) => setFilterGeneration(e.target.value)}
+					>
+						<option value={filterGeneration}>
+							{filterGeneration}
+						</option>
+						{generationArray.map((el, i) => (
+							<option key={i} value={el}>
+								{el}
+							</option>
+						))}
+					</StyledSelect>
+				</StyledSelectContainer>
+
+				<StyledSelectContainer>
+					<StyledPType>Type:</StyledPType>
 
 					<StyledSelect
 						name="Type"
-						id="pokemon-select"
+						id="pokemon-type-select"
 						onChange={(e) => setFilterType(e.target.value)}
 					>
 						<option value="Tout">Tout</option>
@@ -71,8 +107,8 @@ export default function SearchBar({
 							</option>
 						))}
 					</StyledSelect>
-				</div>
+				</StyledSelectContainer>
 			</StyledSelectWrapper>
-		</StyledSearchglobalWrapper>
+		</StyledSearchGlobalWrapper>
 	);
 }
