@@ -177,8 +177,8 @@ export default function Cards() {
 
 	const resultats = data;
 
-	const suivant = data.pokedexId + 1;
-	const precedent = data.pokedexId - 1;
+	const suivant = resultats?.pokedexId + 1;
+	const precedent = resultats?.pokedexId - 1;
 
 	const type = resultats?.apiTypes;
 	const themeByType = [];
@@ -229,7 +229,7 @@ export default function Cards() {
 						<StyledNamePokeIdWrapper>
 							<StyledPokeId>N°{pokemonPokedexId}</StyledPokeId>
 
-							<StyledPokeId>{resultats.name}</StyledPokeId>
+							<StyledPokeId>{resultats?.name}</StyledPokeId>
 						</StyledNamePokeIdWrapper>
 
 						<StyledIllustrationTypeWrapper
@@ -244,12 +244,12 @@ export default function Cards() {
 							}
 						>
 							<StyledImagePokemon
-								src={resultats.image}
+								src={resultats?.image}
 								alt="illustration"
 							/>
 
 							<StyledUlType>
-								{resultats.apiTypes?.map((item) => (
+								{resultats?.apiTypes?.map((item) => (
 									<StyledLi key={item.name}>
 										<StyledImgType
 											src={item.image}
@@ -264,7 +264,7 @@ export default function Cards() {
 						<Stats resultats={resultats} />
 
 						<StyledEvolutionWrapper>
-							{resultats.apiPreEvolution === "none" ? (
+							{resultats?.apiPreEvolution === "none" ? (
 								<StyledH3evolution>
 									Pas de pré-évolution
 								</StyledH3evolution>
@@ -272,14 +272,14 @@ export default function Cards() {
 								<StyledH3evolution>
 									Pré-évolution:
 									<EvolutionLink
-										key={`pokemon-${resultats.apiPreEvolution.pokedexIdd}`}
-										to={`/pokemon/${resultats.apiPreEvolution.pokedexIdd}`}
+										key={`pokemon-${resultats?.apiPreEvolution.pokedexIdd}`}
+										to={`/pokemon/${resultats?.apiPreEvolution.pokedexIdd}`}
 									>
-										{resultats.apiPreEvolution.name}
+										{resultats?.apiPreEvolution.name}
 									</EvolutionLink>
 								</StyledH3evolution>
 							)}
-							{resultats.apiEvolutions.length === 0 ? (
+							{resultats?.apiEvolutions.length === 0 ? (
 								<StyledH3evolution>
 									Evolution: Max
 								</StyledH3evolution>
@@ -287,8 +287,8 @@ export default function Cards() {
 								<StyledH3evolution>
 									Evolution:
 									<EvolutionLink
-										key={`pokemon-${resultats.apiEvolutions[0].pokedexId}`}
-										to={`/pokemon/${resultats.apiEvolutions[0].pokedexId}`}
+										key={`pokemon-${resultats?.apiEvolutions[0].pokedexId}`}
+										to={`/pokemon/${resultats?.apiEvolutions[0].pokedexId}`}
 									>
 										{resultats?.apiEvolutions[0]?.name}
 									</EvolutionLink>
