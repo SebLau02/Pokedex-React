@@ -29,6 +29,7 @@ const StyledLoader = styled.div`
 	justify-content: center;
 	align-items: center;
 	border: 1px solid black;
+	box-shadow: inset 25px 25px 49px #561116, inset -25px -25px 49px #b8232e;
 
 	@media (max-width: 425px) {
 		width: 150px;

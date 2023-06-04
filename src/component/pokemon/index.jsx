@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useFetch } from "../../utils/hooks";
 import Loader from "../loader";
 import SearchBar from "../searchBar";
-import { useState } from "react";
+import Error404 from "../error/error404";
+import { useState, useEffect } from "react";
+import { useFetch } from "../../utils/hooks";
 
 const StyledPokemonContainer = styled.div`
 	max-width: 100vw;
@@ -67,20 +68,46 @@ const StyledLink = styled(Link)`
 		transition: width 0.5s, height 0.5s;
 	}
 `;
+const StyledResultP = styled.p`
+	position: fixed;
+	top: 11vmin;
+	left: 8vw;
+	z-index: 10;
+	font-size: clamp(0.8rem, 2vw, 1.6rem);
+`;
+//********** composant principale / get all object **********
 
 export default function Pokemon() {
-	const [filterGeneration, setFilterGeneration] = useState("Tout");
+	//********** state filtre pour les générations choisie **********
+
 	let apiUrl = "";
+
+	//********** je gardes en mémoire la génération choisi pour retomber dessus **********
+
+	const localStorageGen = localStorage.getItem("generation");
+	const [filterGeneration, setFilterGeneration] = useState(
+		localStorageGen ? localStorageGen : "Tout"
+	);
+
 	filterGeneration === "Tout"
 		? (apiUrl = "https://pokebuildapi.fr/api/v1/pokemon")
 		: (apiUrl = `https://pokebuildapi.fr/api/v1/pokemon/generation/${filterGeneration}`);
 
-	const { data, isLoading } = useFetch(apiUrl);
+	localStorage.setItem("generation", filterGeneration);
+
+	//********** api call pour récuperer les pokémons **********
+
+	const { data, isLoading, error } = useFetch(apiUrl);
 	const listePokemon = data;
 
-	const [filterName, setFilterName] = useState("");
+	//********** filtrage par nom et par type **********
 
-	const [filterType, setFilterType] = useState("Tout");
+	const [filterName, setFilterName] = useState("");
+	const localStorageType = localStorage.getItem("type");
+
+	const [filterType, setFilterType] = useState(
+		localStorageType ? localStorageType : "Tout"
+	);
 
 	const pokemonFiltrerByType = Object.values(listePokemon).filter((el) => {
 		return (
@@ -89,20 +116,24 @@ export default function Pokemon() {
 		);
 	});
 
+	localStorage.setItem("type", filterType);
+
 	let filteredByName = [];
 
 	filteredByName = Object.values(listePokemon).filter((pokemon) =>
 		pokemon.name.toLowerCase().match(filterName.toLowerCase())
 	);
-	console.log(listePokemon);
 
 	return (
 		<div>
-			{isLoading ? (
+			{error ? (
+				<Error404 />
+			) : isLoading ? (
 				<Loader />
 			) : (
 				<StyledWrapper>
 					<SearchBar
+						filterType={filterType}
 						setFilterType={setFilterType}
 						filterName={filterName}
 						setFilterName={setFilterName}
@@ -114,6 +145,9 @@ export default function Pokemon() {
 
 					{filterType === "Tout" ? (
 						<StyledPokemonContainer>
+							<StyledResultP>
+								{filteredByName.length} résultats.
+							</StyledResultP>
 							{filteredByName.map((item) => (
 								<StyledLink
 									key={`pokemon-${item.pokedexId}`}
@@ -129,6 +163,9 @@ export default function Pokemon() {
 						</StyledPokemonContainer>
 					) : (
 						<StyledPokemonContainer>
+							<StyledResultP>
+								{pokemonFiltrerByType.length} résultats.
+							</StyledResultP>
 							{pokemonFiltrerByType.map((item) => (
 								<StyledLink
 									key={`pokemon-${item.pokedexId}`}

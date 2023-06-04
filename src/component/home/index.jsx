@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 
+//********** styled component **********
+
 const HomeWrapper = styled.div`
 	width: 100vw;
 	height: 100vh;
@@ -51,6 +53,8 @@ const StyledSpanBackground = styled.span`
 	background: linear-gradient(80deg, #871a22 10%, #ad4e56 70%, #a71f2a 98%);
 `;
 
+//********** composant accueil **********
+
 export default function Home() {
 	const [toggle, setToogle] = useState(false);
 
@@ -60,6 +64,8 @@ export default function Home() {
 
 	const navigate = useNavigate();
 
+	//********** useref pour gsap **********
+
 	const cardRefTop = useRef(null);
 	const cardRefBottom = useRef(null);
 	const buttonRef = useRef(null);
@@ -67,15 +73,15 @@ export default function Home() {
 	useEffect(() => {
 		gsap.from(cardRefTop.current, {
 			opacity: 0,
-			duration: 2,
+			duration: 1,
 		});
 		gsap.from(cardRefBottom.current, {
 			opacity: 0,
-			duration: 2,
+			duration: 1,
 		});
 		gsap.from(buttonRef.current, {
-			scale: 0.4,
-			duration: 3,
+			scale: 0.2,
+			duration: 1,
 		});
 	}, []);
 
@@ -96,7 +102,7 @@ export default function Home() {
 				duration: 2,
 			});
 		toggle && setTimeout(() => navigate("/pokemon"), "1500");
-	}, [toggle]);
+	}, [toggle, navigate]);
 
 	return (
 		<HomeWrapper>

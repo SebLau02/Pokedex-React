@@ -9,7 +9,7 @@ const StyledSearchBar = styled.input`
 	width: 80%;
 	font-size: clamp(1rem, 2vw, 1.4rem);
 	max-width: 50vw;
-	height: 7vmin;
+	height: 5vmin;
 `;
 
 const StyledSearchWrapper = styled.nav`
@@ -35,6 +35,7 @@ const StyledSearchGlobalWrapper = styled.header`
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index: 10;
 	background: linear-gradient(180deg, ${colors.darkBlue}, ${colors.beige});
 `;
 
@@ -46,11 +47,13 @@ const StyledSelectContainer = styled.div`
 `;
 
 export default function SearchBar({
+	filterType,
 	setFilterType,
 	filterName,
 	setFilterName,
 	filterGeneration,
 	setFilterGeneration,
+	listePokemon,
 }) {
 	const { data } = useFetch(`https://pokebuildapi.fr/api/v1/types`);
 
@@ -98,6 +101,7 @@ export default function SearchBar({
 						name="Type"
 						id="pokemon-type-select"
 						onChange={(e) => setFilterType(e.target.value)}
+						value={filterType}
 					>
 						<option value="Tout">Tout</option>
 
