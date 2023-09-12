@@ -23,6 +23,6 @@ Visit it [here](https://seblau02.github.io/Pokedex-React/)
 
 ### Images
 
-<img src="illustration/pokedex1-3.png" alt="" width="800">
-<img src="illustration/pokedex2-3.png" alt="" width="800">
-<img src="illustration/pokedex3-3.png" alt="" width="800">
+<img src="illustration/pokedex1-3.png" alt="resuoltats des recherches" width="800">
+<img src="illustration/pokedex2-3.png" alt="détails d'un pokemon" width="800">
+<img src="illustration/pokedex3-3.png" alt="accueil" width="800">
