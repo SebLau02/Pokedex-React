@@ -75,14 +75,13 @@ const StyledResultP = styled.p`
 	z-index: 10;
 	font-size: clamp(0.8rem, 2vw, 1.6rem);
 `;
-//********** composant principale / get all object **********
 
 export default function Pokemon() {
 	//********** state filtre pour les générations choisie **********
 
 	let apiUrl = "";
 
-	//********** je gardes en mémoire la génération choisi pour retomber dessus **********
+	//********** je gardes en mémoire local la génération choisi pour le récupérer après chaque premier charment de la page **********
 
 	const localStorageGen = localStorage.getItem("generation");
 	const [filterGeneration, setFilterGeneration] = useState(

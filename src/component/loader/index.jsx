@@ -63,7 +63,7 @@ const Wrapper = styled.div`
 
 export default function Loader() {
 	return (
-		<Wrapper>
+		<Wrapper data-testid="loader">
 			<StyledLoader>
 				<StyledSection></StyledSection>
 				<StyledButton></StyledButton>

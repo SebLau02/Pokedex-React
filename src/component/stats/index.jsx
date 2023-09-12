@@ -67,7 +67,6 @@ export default function Stats({ resultats }) {
 					width: resultats?.stats?.special_attack / 5 + "rem",
 				}}
 			>
-				{" "}
 				{resultats?.stats?.special_attack}
 			</StyledSpanStatsAnimation>
 			<StyledLiText>DEF SPE:</StyledLiText>
