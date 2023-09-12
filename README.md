@@ -2,7 +2,7 @@
 
 ## Fr
 
-### Description:
+### Description
 
 Pokedex: accès à toutes les données des pokemons des 8 premières génération.
 
