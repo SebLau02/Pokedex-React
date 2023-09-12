@@ -6,7 +6,7 @@
 
 Pokedex: accès à toutes les données des pokemons des 8 premières génération.
 
-### Details
+### Détails
 
 Voici mon premier projet avec react. J'ai préféré commencé par quelques chose qui m'était familier. Les données proviennent d'une api (https://pokebuildapi.fr/api/v1) gratuite.
 J'ai utilisé react et quelques animations ont été faites avec gsap.
