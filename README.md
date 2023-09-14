@@ -4,7 +4,7 @@
 
 ### Description
 
-Pokedex: accès à toutes les données des pokemons des 8 premières génération.
+Pokedex: accès à toutes les données de tout les pokemons des 8 premières génération.
 
 ### Détails
 
