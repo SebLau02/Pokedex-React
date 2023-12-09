@@ -2,15 +2,15 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import Pokemon from "./";
 
-describe("Pokemon", () => {
+describe("Pokemon component", () => {
     it("should render whithout crash", async () => {
         render(<Pokemon />);
     });
 
-    it("should loader is visible while is loading", async () => {
-        const { getByTestId } = render(<Pokemon />);
+    it("loader should be rendered while loading", async () => {
+        render(<Pokemon />);
 
-        const loader = getByTestId("loader");
+        const loader = screen.getByTestId("loader");
 
         expect(loader).toBeVisible();
     });

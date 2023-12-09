@@ -1,12 +1,18 @@
+import React, { useRef } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+
 import Loader from "../loader";
 import SearchBar from "../searchBar";
 import Error404 from "../error/error404";
+import Cards from "../card";
+
 import { useState, useEffect } from "react";
 import { useFetch } from "../../utils/hooks";
 
-const StyledPokemonContainer = styled.div`
+import "./index.css";
+
+const PokemonContainer = styled.section`
 	max-width: 100vw;
 	display: flex;
 	justify-content: center;
@@ -17,7 +23,7 @@ const StyledPokemonContainer = styled.div`
 	justify-items: center;
 	min-height: 83vh;
 `;
-const StyledImagePokemon = styled.img`
+const ImagePokemon = styled.img`
 	width: 100%;
 	height: 100%;
 	&:hover {
@@ -26,13 +32,18 @@ const StyledImagePokemon = styled.img`
 	}
 `;
 
-const StyledWrapper = styled.main`
+const PokemonGlobalContainer = styled.main`
+	position: relative;
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+
 	width: 100%;
+
 	margin-top: 15vmin;
+
 	background-image: repeating-linear-gradient(
 			524deg,
 			transparent 0px,
@@ -58,7 +69,7 @@ const StyledWrapper = styled.main`
 			hsl(139.571, 85%, 78%)
 		);
 `;
-const StyledLink = styled(Link)`
+const PokemonLink = styled.article`
 	width: 10vw;
 	height: auto;
 
@@ -68,12 +79,15 @@ const StyledLink = styled(Link)`
 		transition: width 0.5s, height 0.5s;
 	}
 `;
-const StyledResultP = styled.p`
+const TotalResult = styled.p`
 	position: fixed;
 	top: 11vmin;
 	left: 8vw;
 	z-index: 10;
+
 	font-size: clamp(0.8rem, 2vw, 1.6rem);
+
+	transition: transform 0.1s linear;
 `;
 
 export default function Pokemon() {
@@ -81,15 +95,15 @@ export default function Pokemon() {
 
 	let apiUrl = "";
 
-	//********** je gardes en mémoire local la génération choisi pour le récupérer après chaque premier charment de la page **********
+	//********** je gardes en mémoire local la génération choisi pour le récupérer après chaque premier chargement de la page **********
 
 	const localStorageGen = localStorage.getItem("generation");
 	const [filterGeneration, setFilterGeneration] = useState(
-		localStorageGen ? localStorageGen : "Tout"
+		localStorageGen ? localStorageGen : "Tout",
 	);
 
 	filterGeneration === "Tout"
-		? (apiUrl = "https://pokebuildapi.fr/api/v1/pokemon")
+		? (apiUrl = `https://pokebuildapi.fr/api/v1/pokemon`)
 		: (apiUrl = `https://pokebuildapi.fr/api/v1/pokemon/generation/${filterGeneration}`);
 
 	localStorage.setItem("generation", filterGeneration);
@@ -97,7 +111,14 @@ export default function Pokemon() {
 	//********** api call pour récuperer les pokémons **********
 
 	const { data, isLoading, error } = useFetch(apiUrl);
-	const listePokemon = data;
+
+	const [pokemonList, setPokemonList] = useState(Object.values(data));
+
+	useEffect(() => {
+		if (data) {
+			setPokemonList(Object.values(data));
+		}
+	}, [data]);
 
 	//********** filtrage par nom et par type **********
 
@@ -105,10 +126,10 @@ export default function Pokemon() {
 	const localStorageType = localStorage.getItem("type");
 
 	const [filterType, setFilterType] = useState(
-		localStorageType ? localStorageType : "Tout"
+		localStorageType ? localStorageType : "Tout",
 	);
 
-	const pokemonFiltrerByType = Object.values(listePokemon).filter((el) => {
+	const pokemonFiltrerByType = Object.values(pokemonList).filter((el) => {
 		return (
 			el.apiTypes[0]?.name === filterType ||
 			el.apiTypes[1]?.name === filterType
@@ -119,9 +140,33 @@ export default function Pokemon() {
 
 	let filteredByName = [];
 
-	filteredByName = Object.values(listePokemon).filter((pokemon) =>
-		pokemon.name.toLowerCase().match(filterName.toLowerCase())
+	filteredByName = Object.values(pokemonList).filter((pokemon) =>
+		pokemon.name.toLowerCase().match(filterName.toLowerCase()),
 	);
+
+	const [closeCard, setCloseCard] = useState(); // afficher / fermer carte
+	const [scrollY, setScrollY] = useState(window.scrollY); //détecter si je scroll vers le bas ou haut
+	const [hiddenScroll, setHiddenScroll] = useState(false); //afficher / cacher navbar au scroll
+	const [pokemonId, setPokemonId] = useState(1); // id du pokemon choisi
+	const [cardPosition, setCardPosition] = useState({ pageY: 0, clientY: 0 }); // position du pokemon choisi
+
+	useEffect(() => {
+		const handleScroll = () => {
+			if (window.scrollY <= scrollY) {
+				setHiddenScroll(false);
+				setScrollY(window.scrollY);
+			} else {
+				setHiddenScroll(true);
+				setScrollY(window.scrollY);
+			}
+		};
+
+		window.addEventListener("scroll", handleScroll);
+
+		return () => {
+			window.removeEventListener("scroll", handleScroll);
+		};
+	}, [scrollY]);
 
 	return (
 		<div>
@@ -130,56 +175,77 @@ export default function Pokemon() {
 			) : isLoading ? (
 				<Loader />
 			) : (
-				<StyledWrapper>
+				<PokemonGlobalContainer>
 					<SearchBar
 						filterType={filterType}
 						setFilterType={setFilterType}
 						filterName={filterName}
 						setFilterName={setFilterName}
-						listePokemon={listePokemon}
-						filteredByName={filteredByName}
 						filterGeneration={filterGeneration}
 						setFilterGeneration={setFilterGeneration}
+						hiddenScroll={hiddenScroll}
 					/>
 
 					{filterType === "Tout" ? (
-						<StyledPokemonContainer>
-							<StyledResultP>
+						<PokemonContainer>
+							<TotalResult className={hiddenScroll && "hidden"}>
 								{filteredByName.length} résultats.
-							</StyledResultP>
+							</TotalResult>
 							{filteredByName.map((item) => (
-								<StyledLink
+								<PokemonLink
 									key={`pokemon-${item.pokedexId}`}
-									to={`/pokemon/${item.pokedexId}`}
+									onClick={(e) => {
+										setCloseCard(true);
+										setPokemonId(item.pokedexId);
+										setCardPosition({
+											pageY: e.pageY,
+											clientY: e.clientY,
+										});
+									}}
 								>
-									<StyledImagePokemon
+									<ImagePokemon
 										key={item.pokedexId}
 										src={item.sprite}
 										alt="illustration de pokemon"
 									/>
-								</StyledLink>
+								</PokemonLink>
 							))}
-						</StyledPokemonContainer>
+						</PokemonContainer>
 					) : (
-						<StyledPokemonContainer>
-							<StyledResultP>
+						<PokemonContainer>
+							<TotalResult>
 								{pokemonFiltrerByType.length} résultats.
-							</StyledResultP>
+							</TotalResult>
 							{pokemonFiltrerByType.map((item) => (
-								<StyledLink
+								<PokemonLink
 									key={`pokemon-${item.pokedexId}`}
-									to={`/pokemon/${item.pokedexId}`}
+									onClick={(e) => {
+										setCloseCard(true);
+										setPokemonId(item.pokedexId);
+										setCardPosition({
+											pageY: e.pageY,
+											clientY: e.clientY,
+										});
+									}}
 								>
-									<StyledImagePokemon
+									<ImagePokemon
 										key={item.pokedexId}
 										src={item.sprite}
 										alt="illustration de pokemon"
 									/>
-								</StyledLink>
+								</PokemonLink>
 							))}
-						</StyledPokemonContainer>
+						</PokemonContainer>
 					)}
-				</StyledWrapper>
+
+					<Cards
+						closeCard={closeCard}
+						setCloseCard={setCloseCard}
+						pokemonId={pokemonId}
+						setPokemonId={setPokemonId}
+						cardPosition={cardPosition}
+					/>
+				</PokemonGlobalContainer>
 			)}
 		</div>
 	);

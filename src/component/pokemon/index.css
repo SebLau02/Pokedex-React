@@ -1,0 +1,23 @@
+/*.card {
+	position: fixed;
+	top: 15vmin;
+	left: 50%;
+	transform: translate(-50%, 0%);
+
+	width: 60%;
+	height: 100vh;
+
+	border-radius: 1vw;
+
+	background-color: #eaa6a6;
+}
+
+.card.active {
+	display: none;
+}
+.card.full {
+	transform: translate(-50%, -15vmin);
+
+	transition: transform 0.2s ease;
+}
+*/

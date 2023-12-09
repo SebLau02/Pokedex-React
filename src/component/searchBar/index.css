@@ -1,0 +1,5 @@
+.hidden {
+	transform: translateY(-15vmin);
+
+	transition: transform 0.2s ease;
+}

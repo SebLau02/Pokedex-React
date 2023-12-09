@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useFetch } from "../../utils/hooks";
 import colors from "../../utils/style/colors";
 
+import "./index.css";
+
 const StyledSearchBar = styled.input`
 	border-radius: 1rem;
 	padding: 0.5rem;
@@ -31,12 +33,17 @@ const StyledSelect = styled.select`
 const StyledSearchGlobalWrapper = styled.header`
 	width: 100%;
 	height: 15vmin;
+
 	padding: 1vmax;
+
 	position: fixed;
 	top: 0;
 	left: 0;
 	z-index: 10;
+
 	background: linear-gradient(180deg, ${colors.darkBlue}, ${colors.beige});
+
+	transition: transform 0.1s linear;
 `;
 
 const StyledPType = styled.p`
@@ -53,7 +60,7 @@ export default function SearchBar({
 	setFilterName,
 	filterGeneration,
 	setFilterGeneration,
-	listePokemon,
+	hiddenScroll,
 }) {
 	const { data } = useFetch(`https://pokebuildapi.fr/api/v1/types`);
 
@@ -64,7 +71,7 @@ export default function SearchBar({
 	const generationArray = ["Tout", "1", "2", "3", "4", "5", "6", "7", "8"];
 
 	return (
-		<StyledSearchGlobalWrapper>
+		<StyledSearchGlobalWrapper className={hiddenScroll && "hidden"}>
 			<StyledSearchWrapper>
 				<StyledSearchBar
 					type="search"
