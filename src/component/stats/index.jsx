@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import colors from "../../utils/style/colors";
 
-const StyledSpanStatsAnimation = styled.span`
+const Statistique = styled.span`
 	display: block;
 	height: clamp(1rem, 2vw, 1.5rem);
 	max-width: 100%;
@@ -17,7 +17,7 @@ const StyledSpanStatsAnimation = styled.span`
 	font-size: clamp(1rem, 2vw, 1.6rem);
 `;
 
-const SyledStatsWrapper = styled.div`
+const StatsWrapper = styled.div`
 	max-width: 80rem;
 	width: 70%;
 	display: grid;
@@ -30,61 +30,61 @@ const SyledStatsWrapper = styled.div`
 	box-shadow: 3px 3px 5px #565656;
 	background: ${colors.beige};
 `;
-const StyledLiText = styled.p`
+const StatList = styled.p`
 	font-size: clamp(1rem, 3vw, 1.6rem);
 `;
 
-export default function Stats({ resultats }) {
+export default function Stats({ pokemonData }) {
 	return (
-		<SyledStatsWrapper>
-			<StyledLiText>HP:</StyledLiText>
-			<StyledSpanStatsAnimation
+		<StatsWrapper>
+			<StatList>HP:</StatList>
+			<Statistique
 				style={{
-					width: resultats?.stats?.HP / 5 + "rem",
+					width: pokemonData?.stats?.HP / 5 + "rem",
 				}}
 			>
-				{resultats?.stats?.HP}
-			</StyledSpanStatsAnimation>
-			<StyledLiText>ATK:</StyledLiText>
-			<StyledSpanStatsAnimation
+				{pokemonData?.stats?.HP}
+			</Statistique>
+			<StatList>ATK:</StatList>
+			<Statistique
 				style={{
-					width: resultats?.stats?.attack / 5 + "rem",
+					width: pokemonData?.stats?.attack / 5 + "rem",
 				}}
 			>
-				{resultats?.stats?.attack}
-			</StyledSpanStatsAnimation>
-			<StyledLiText>DEF:</StyledLiText>
-			<StyledSpanStatsAnimation
+				{pokemonData?.stats?.attack}
+			</Statistique>
+			<StatList>DEF:</StatList>
+			<Statistique
 				style={{
-					width: resultats?.stats?.defense / 5 + "rem",
+					width: pokemonData?.stats?.defense / 5 + "rem",
 				}}
 			>
-				{resultats?.stats?.defense}
-			</StyledSpanStatsAnimation>
-			<StyledLiText>ATK SPE:</StyledLiText>
-			<StyledSpanStatsAnimation
+				{pokemonData?.stats?.defense}
+			</Statistique>
+			<StatList>ATK SPE:</StatList>
+			<Statistique
 				style={{
-					width: resultats?.stats?.special_attack / 5 + "rem",
+					width: pokemonData?.stats?.special_attack / 5 + "rem",
 				}}
 			>
-				{resultats?.stats?.special_attack}
-			</StyledSpanStatsAnimation>
-			<StyledLiText>DEF SPE:</StyledLiText>
-			<StyledSpanStatsAnimation
+				{pokemonData?.stats?.special_attack}
+			</Statistique>
+			<StatList>DEF SPE:</StatList>
+			<Statistique
 				style={{
-					width: resultats?.stats?.special_defense / 5 + "rem",
+					width: pokemonData?.stats?.special_defense / 5 + "rem",
 				}}
 			>
-				{resultats?.stats?.special_defense}
-			</StyledSpanStatsAnimation>
-			<StyledLiText>VITESSE:</StyledLiText>
-			<StyledSpanStatsAnimation
+				{pokemonData?.stats?.special_defense}
+			</Statistique>
+			<StatList>VITESSE:</StatList>
+			<Statistique
 				style={{
-					width: resultats.stats?.speed / 5 + "rem",
+					width: pokemonData.stats?.speed / 5 + "rem",
 				}}
 			>
-				{resultats?.stats?.speed}
-			</StyledSpanStatsAnimation>
-		</SyledStatsWrapper>
+				{pokemonData?.stats?.speed}
+			</Statistique>
+		</StatsWrapper>
 	);
 }

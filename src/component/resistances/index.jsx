@@ -4,12 +4,12 @@ import { useFetch } from "../../utils/hooks";
 import "./index.css";
 import colors from "../../utils/style/colors";
 
-const StyledImgType = styled.img`
+const TypeImg = styled.img`
 	width: 3vw;
 	min-width: 20px;
 `;
 
-const StyledSection = styled.section`
+const Section = styled.section`
 	display: grid;
 	grid-template-columns: repeat(3, 190px);
 	grid-template-rows: 40px 1fr;
@@ -24,7 +24,7 @@ const StyledSection = styled.section`
 	}
 `;
 
-const StyledResistancesUl = styled.ul`
+const ResistancesList = styled.ul`
 	grid-column: span 3;
 	width: 100%;
 	border-bottom-left-radius: 1rem;
@@ -32,13 +32,13 @@ const StyledResistancesUl = styled.ul`
 	min-height: 7rem;
 `;
 
-const StyledButtonTab = styled.button`
+const Onglet = styled.button`
 	grid-column: span 1;
 	font-size: clamp(1rem, 1.6vw, 1.6rem);
 	padding: 1rem;
 `;
 
-const StyledLi = styled.li`
+const Resitance = styled.li`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -47,8 +47,8 @@ const StyledLi = styled.li`
 	margin: 1rem 0.5rem;
 `;
 
-export default function Resistances({ resultats }) {
-	const resistances = resultats.apiResistances;
+export default function Resistances({ pokemonData }) {
+	const resistances = pokemonData.apiResistances;
 
 	const vulnerability = [];
 	const resistant = [];
@@ -74,15 +74,15 @@ export default function Resistances({ resultats }) {
 
 	return (
 		<div>
-			<StyledSection id="section">
-				<StyledButtonTab
+			<Section id="section">
+				<Onglet
 					onClick={() => toggleTab(1)}
 					style={{ border: "none" }}
 					className={toggleTabs === 1 ? "active-tab" : "tab"}
 				>
 					Vulnérable
-				</StyledButtonTab>
-				<StyledButtonTab
+				</Onglet>
+				<Onglet
 					onClick={() => toggleTab(2)}
 					style={{
 						border: "none",
@@ -90,78 +90,78 @@ export default function Resistances({ resultats }) {
 					className={toggleTabs === 2 ? "active-tab" : "tab"}
 				>
 					Neutre
-				</StyledButtonTab>
-				<StyledButtonTab
+				</Onglet>
+				<Onglet
 					onClick={() => toggleTab(3)}
 					style={{ border: "none" }}
 					className={toggleTabs === 3 ? "active-tab" : "tab"}
 				>
 					Résistant
-				</StyledButtonTab>
-				<StyledResistancesUl
+				</Onglet>
+				<ResistancesList
 					className={
 						toggleTabs === 1 ? "contenu active-contenu" : "contenu"
 					}
 				>
 					{vulnerability.map((item) => (
-						<StyledLi key={item.name}>
+						<Resitance key={item.name}>
 							{Object.values(data).map(
 								(object) =>
 									object.name === item.name && (
-										<StyledImgType
+										<TypeImg
 											src={object.image}
 											alt="illustration du type"
 											key={object.name.toUpperCase()}
 										/>
-									)
+									),
 							)}
 							{item.name}
-						</StyledLi>
+						</Resitance>
 					))}
-				</StyledResistancesUl>
-				<StyledResistancesUl
+				</ResistancesList>
+				<ResistancesList
 					className={
 						toggleTabs === 2 ? "contenu active-contenu" : "contenu"
 					}
 				>
 					{neutre.map((item) => (
-						<StyledLi key={item.name}>
+						<Resitance key={item.name}>
 							{Object.values(data).map(
 								(object) =>
 									object.name === item.name && (
-										<StyledImgType
+										<TypeImg
 											src={object.image}
 											alt="illustration du type"
 											key={object.name.toUpperCase()}
 										/>
-									)
+									),
 							)}
 							{item.name}
-						</StyledLi>
+						</Resitance>
 					))}
-				</StyledResistancesUl>
-				<StyledResistancesUl
+				</ResistancesList>
+				<ResistancesList
 					className={
 						toggleTabs === 3 ? "contenu active-contenu" : "contenu"
 					}
 				>
 					{resistant.map((item) => (
-						<StyledLi key={item.name}>
+						<Resitance key={item.name}>
 							{Object.values(data).map(
 								(object) =>
 									object.name === item.name && (
-										<StyledImgType
+										<TypeImg
 											src={object.image}
 											alt="illustration du type"
 											key={object.name.toUpperCase()}
 										/>
-									)
+									),
 							)}
 							{item.name}
-						</StyledLi>
+						</Resitance>
 					))}
-				</StyledResistancesUl>
-			</StyledSection>
+				</ResistancesList>
+			</Section>
 		</div>
 	);
 }

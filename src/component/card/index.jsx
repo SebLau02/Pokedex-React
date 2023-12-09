@@ -93,7 +93,7 @@ const PokemonCard = styled.article`
 	}
 `;
 
-const StyledNamePokeIdWrapper = styled.div`
+const NameIdWrapper = styled.div`
 	width: 80%;
 	display: flex;
 	justify-content: space-around;
@@ -105,7 +105,7 @@ const StyledNamePokeIdWrapper = styled.div`
 	box-shadow: 3px 3px 5px #565656;
 	background-color: ${colors.yellow};
 `;
-const StyledLinkWrapper = styled.div`
+const NextPreviousWrapper = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
@@ -121,7 +121,7 @@ const StyledLinkWrapper = styled.div`
 
 	padding: 1rem 3rem 0.5rem;
 `;
-const StyledIllustrationTypeWrapper = styled.div`
+const IllustrationWrapper = styled.div`
 	width: 80%;
 	display: flex;
 	align-items: center;
@@ -132,7 +132,7 @@ const StyledIllustrationTypeWrapper = styled.div`
 	box-shadow: 3px 3px 5px #565656;
 `;
 
-const StyledEvolutionWrapper = styled.div`
+const EvolutionWrapper = styled.div`
 	width: 70%;
 	max-width: 70%;
 	border: 2px solid ${colors.red};
@@ -142,12 +142,12 @@ const StyledEvolutionWrapper = styled.div`
 	box-shadow: 3px 3px 5px #565656;
 	background: ${colors.beige};
 `;
-const StyledH3evolution = styled.h3`
+const EvolutionTitle = styled.h3`
 	margin: 1rem;
 	font-size: clamp(1rem, 2vw, 1.8rem);
 `;
 
-const StyledPokeId = styled.h2`
+const PokeId = styled.h2`
 	font-size: clamp(1.6rem, 2vw, 2rem);
 `;
 
@@ -191,9 +191,14 @@ const CardGlobalSection = styled.section`
 	}
 `;
 
-const EvolutionLink = styled(Link)`
+const EvolutionLink = styled.div`
 	color: ${colors.green};
 	text-decoration: none;
+`;
+
+const NavButton = styled.button`
+	border: none;
+	background: none;
 `;
 
 export default function Cards({
@@ -207,15 +212,23 @@ export default function Cards({
 		`https://pokebuildapi.fr/api/v1/pokemon/${pokemonId}`,
 	);
 
-	const resultats = data;
+	const [pokemonData, setPokemonData] = useState(data);
 
-	const suivant = resultats?.pokedexId + 1;
-	const precedent = resultats?.pokedexId - 1;
+	useEffect(() => {
+		if (data) {
+			setPokemonData(data);
+		}
+	}, [data]);
 
-	const type = resultats?.apiTypes;
-	const themeByType = [];
+	const suivant = pokemonData?.pokedexId + 1;
+	const precedent = pokemonData?.pokedexId - 1;
 
-	type?.forEach((el) => themeByType.push(theme[`${el.name}`]));
+	//---------------------------------------------
+
+	const type = pokemonData?.apiTypes; // récupérer le type
+	const themeByType = []; // theme par type
+
+	type?.forEach((el) => themeByType.push(theme[`${el.name}`])); // définition des couleurs en fonction du type
 
 	return (
 		<div>
@@ -232,14 +245,18 @@ export default function Cards({
 							top: cardPosition.pageY - cardPosition.clientY,
 						}}
 					>
-						<StyledLinkWrapper>
+						<NextPreviousWrapper>
 							{precedent >= 1 ? (
-								<Link to={`/pokemon/${precedent}`}>
+								<NavButton
+									onClick={() => {
+										setPokemonId(pokemonId--);
+									}}
+								>
 									<LeftArrow
 										fill="#ffff"
 										className="arrow-nav left "
 									/>
-								</Link>
+								</NavButton>
 							) : (
 								<LeftArrow
 									fill="#a0a0a0"
@@ -248,27 +265,31 @@ export default function Cards({
 							)}
 
 							{suivant <= 898 ? (
-								<Link to={`/pokemon/${suivant}`}>
+								<NavButton
+									onClick={() => {
+										setPokemonId(pokemonId++);
+									}}
+								>
 									<RightArrow
 										fill="#ffff"
 										className="arrow-nav right"
 									/>
-								</Link>
+								</NavButton>
 							) : (
 								<RightArrow
 									fill="#a0a0a0"
 									className="arrow-nav active-right"
 								/>
 							)}
-						</StyledLinkWrapper>
+						</NextPreviousWrapper>
 
-						<StyledNamePokeIdWrapper>
-							<StyledPokeId>N°{pokemonId}</StyledPokeId>
+						<NameIdWrapper>
+							<PokeId>N°{pokemonId}</PokeId>
 
-							<StyledPokeId>{resultats?.name}</StyledPokeId>
-						</StyledNamePokeIdWrapper>
+							<PokeId>{pokemonData?.name}</PokeId>
+						</NameIdWrapper>
 
-						<StyledIllustrationTypeWrapper
+						<IllustrationWrapper
 							style={
 								themeByType.length > 1
 									? {
@@ -280,12 +301,12 @@ export default function Cards({
 							}
 						>
 							<StyledImagePokemon
-								src={resultats?.image}
+								src={pokemonData?.image}
 								alt="illustration"
 							/>
 
 							<StyledUlType>
-								{resultats?.apiTypes?.map((item) => (
+								{pokemonData?.apiTypes?.map((item) => (
 									<StyledLi key={item.name}>
 										<StyledImgType
 											src={item.image}
@@ -295,44 +316,57 @@ export default function Cards({
 									</StyledLi>
 								))}
 							</StyledUlType>
-						</StyledIllustrationTypeWrapper>
+						</IllustrationWrapper>
 
-						<Stats resultats={resultats} />
+						<Stats pokemonData={pokemonData} />
 
-						<StyledEvolutionWrapper>
-							{resultats?.apiPreEvolution === "none" ? (
-								<StyledH3evolution>
+						<EvolutionWrapper>
+							{pokemonData?.apiPreEvolution === "none" ? (
+								<EvolutionTitle>
 									Pas de pré-évolution
-								</StyledH3evolution>
+								</EvolutionTitle>
 							) : (
-								<StyledH3evolution>
+								<EvolutionTitle>
 									Pré-évolution:
 									<EvolutionLink
-										key={`pokemon-${resultats?.apiPreEvolution.pokedexId}`}
-										to={`/pokemon/${resultats?.apiPreEvolution.pokedexId}`}
+										onClick={() => {
+											setPokemonId(
+												pokemonData?.apiPreEvolution
+													.pokedexIdd,
+											);
+										}}
 									>
-										{resultats?.apiPreEvolution.name}
+										{pokemonData?.apiPreEvolution?.name}
 									</EvolutionLink>
-								</StyledH3evolution>
+								</EvolutionTitle>
 							)}
-							{resultats?.apiEvolutions.length === 0 ? (
-								<StyledH3evolution>
-									Evolution: Max
-								</StyledH3evolution>
-							) : (
-								<StyledH3evolution>
-									Evolution:
-									<EvolutionLink
-										key={`pokemon-${resultats?.apiEvolutions[0].pokedexId}`}
-										to={`/pokemon/${resultats?.apiEvolutions[0].pokedexId}`}
-									>
-										{resultats?.apiEvolutions[0]?.name}
-									</EvolutionLink>
-								</StyledH3evolution>
-							)}
-						</StyledEvolutionWrapper>
+							{pokemonData?.apiEvolutions &&
+								(pokemonData?.apiEvolutions?.length === 0 ? (
+									<EvolutionTitle>
+										Evolution: Max
+									</EvolutionTitle>
+								) : (
+									<EvolutionTitle>
+										Evolution:
+										<EvolutionLink
+											onClick={() => {
+												setPokemonId(
+													pokemonData
+														?.apiEvolutions[0]
+														?.pokedexId,
+												);
+											}}
+										>
+											{
+												pokemonData?.apiEvolutions[0]
+													?.name
+											}
+										</EvolutionLink>
+									</EvolutionTitle>
+								))}
+						</EvolutionWrapper>
 
-						<Resistances resultats={resultats} />
+						<Resistances pokemonData={pokemonData} />
 
 						<CloseButton
 							onClick={() => {

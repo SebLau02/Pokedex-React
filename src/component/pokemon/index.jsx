@@ -69,9 +69,12 @@ const PokemonGlobalContainer = styled.main`
 			hsl(139.571, 85%, 78%)
 		);
 `;
-const PokemonLink = styled.article`
+const PokemonLink = styled.button`
 	width: 10vw;
 	height: auto;
+
+	border: none;
+	background: none;
 
 	@media (max-width: 425px) {
 		width: 20vw;
@@ -119,6 +122,17 @@ export default function Pokemon() {
 			setPokemonList(Object.values(data));
 		}
 	}, [data]);
+
+	useEffect(() => {
+		const selectedGeneration = [];
+
+		Object.values(data).filter((pokemon) => {
+			pokemon.apiGeneration === parseInt(filterGeneration) &&
+				selectedGeneration.push(pokemon);
+		});
+
+		console.log(selectedGeneration);
+	}, [filterGeneration]);
 
 	//********** filtrage par nom et par type **********
 
