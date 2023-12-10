@@ -58,8 +58,8 @@ export default function SearchBar({
 	setFilterType,
 	filterName,
 	setFilterName,
-	filterGeneration,
-	setFilterGeneration,
+	selectedGeneration,
+	setSelectedGeneration,
 	hiddenScroll,
 }) {
 	const { data } = useFetch(`https://pokebuildapi.fr/api/v1/types`);
@@ -88,10 +88,10 @@ export default function SearchBar({
 					<StyledSelect
 						name="Génération"
 						id="pokemon-gen-select"
-						onChange={(e) => setFilterGeneration(e.target.value)}
+						onChange={(e) => setSelectedGeneration(e.target.value)}
 					>
-						<option value={filterGeneration}>
-							{filterGeneration}
+						<option value={selectedGeneration}>
+							{selectedGeneration}
 						</option>
 						{generationArray.map((el, i) => (
 							<option key={i} value={el}>

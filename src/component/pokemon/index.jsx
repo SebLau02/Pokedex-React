@@ -14,18 +14,22 @@ import "./index.css";
 
 const PokemonContainer = styled.section`
 	max-width: 100vw;
+	min-height: 83vh;
+	height: auto;
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-wrap: wrap;
-	margin: 30px auto;
+
+	margin: 30px auto 0;
+	padding: auto;
 	padding: 0 10px;
-	justify-items: center;
-	min-height: 83vh;
 `;
 const ImagePokemon = styled.img`
 	width: 100%;
 	height: 100%;
+
 	&:hover {
 		border-radius: 20px;
 		scale: 1.2;
@@ -34,13 +38,6 @@ const ImagePokemon = styled.img`
 
 const PokemonGlobalContainer = styled.main`
 	position: relative;
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-
-	width: 100%;
 
 	margin-top: 15vmin;
 
@@ -94,22 +91,15 @@ const TotalResult = styled.p`
 `;
 
 export default function Pokemon() {
+	const [cardHeight, setCardHeight] = useState(0);
+
 	//********** state filtre pour les générations choisie **********
 
-	let apiUrl = "";
+	let apiUrl = "https://pokebuildapi.fr/api/v1/pokemon";
 
 	//********** je gardes en mémoire local la génération choisi pour le récupérer après chaque premier chargement de la page **********
 
-	const localStorageGen = localStorage.getItem("generation");
-	const [filterGeneration, setFilterGeneration] = useState(
-		localStorageGen ? localStorageGen : "Tout",
-	);
-
-	filterGeneration === "Tout"
-		? (apiUrl = `https://pokebuildapi.fr/api/v1/pokemon`)
-		: (apiUrl = `https://pokebuildapi.fr/api/v1/pokemon/generation/${filterGeneration}`);
-
-	localStorage.setItem("generation", filterGeneration);
+	const [selectedGeneration, setSelectedGeneration] = useState("Tout");
 
 	//********** api call pour récuperer les pokémons **********
 
@@ -117,46 +107,51 @@ export default function Pokemon() {
 
 	const [pokemonList, setPokemonList] = useState(Object.values(data));
 
+	const [filterName, setFilterName] = useState("");
+
 	useEffect(() => {
 		if (data) {
 			setPokemonList(Object.values(data));
 		}
 	}, [data]);
 
+	//********** filtrage par génération et nom**********
+
 	useEffect(() => {
-		const selectedGeneration = [];
+		setPokemonList(
+			Object.values(data).filter((pokemon) => {
+				if (selectedGeneration !== "Tout") {
+					if (filterName !== "") {
+						return pokemon.name
+							.toLowerCase()
+							.match(filterName.toLowerCase());
+					}
+					return (
+						pokemon.apiGeneration === parseInt(selectedGeneration)
+					);
+				} else if (filterName !== "") {
+					return pokemon.name
+						.toLowerCase()
+						.match(filterName.toLowerCase());
+				} else {
+					return true;
+				}
+			}),
+		);
+	}, [selectedGeneration, filterName]);
 
-		Object.values(data).filter((pokemon) => {
-			pokemon.apiGeneration === parseInt(filterGeneration) &&
-				selectedGeneration.push(pokemon);
-		});
+	//********** filtrage par type **********
 
-		console.log(selectedGeneration);
-	}, [filterGeneration]);
+	const [filterType, setFilterType] = useState("Tout");
 
-	//********** filtrage par nom et par type **********
-
-	const [filterName, setFilterName] = useState("");
-	const localStorageType = localStorage.getItem("type");
-
-	const [filterType, setFilterType] = useState(
-		localStorageType ? localStorageType : "Tout",
-	);
-
-	const pokemonFiltrerByType = Object.values(pokemonList).filter((el) => {
+	const pokemonFiltrerByType = Object.values(pokemonList).filter((type) => {
 		return (
-			el.apiTypes[0]?.name === filterType ||
-			el.apiTypes[1]?.name === filterType
+			type.apiTypes[0]?.name === filterType ||
+			type.apiTypes[1]?.name === filterType
 		);
 	});
 
-	localStorage.setItem("type", filterType);
-
-	let filteredByName = [];
-
-	filteredByName = Object.values(pokemonList).filter((pokemon) =>
-		pokemon.name.toLowerCase().match(filterName.toLowerCase()),
-	);
+	//---------------------------------------------
 
 	const [closeCard, setCloseCard] = useState(); // afficher / fermer carte
 	const [scrollY, setScrollY] = useState(window.scrollY); //détecter si je scroll vers le bas ou haut
@@ -195,17 +190,19 @@ export default function Pokemon() {
 						setFilterType={setFilterType}
 						filterName={filterName}
 						setFilterName={setFilterName}
-						filterGeneration={filterGeneration}
-						setFilterGeneration={setFilterGeneration}
+						selectedGeneration={selectedGeneration}
+						setSelectedGeneration={setSelectedGeneration}
 						hiddenScroll={hiddenScroll}
 					/>
 
 					{filterType === "Tout" ? (
-						<PokemonContainer>
+						<PokemonContainer
+							style={{ paddingBottom: `${cardHeight}px` }}
+						>
 							<TotalResult className={hiddenScroll && "hidden"}>
-								{filteredByName.length} résultats.
+								{pokemonList.length} résultats.
 							</TotalResult>
-							{filteredByName.map((item) => (
+							{pokemonList.map((item) => (
 								<PokemonLink
 									key={`pokemon-${item.pokedexId}`}
 									onClick={(e) => {
@@ -226,7 +223,9 @@ export default function Pokemon() {
 							))}
 						</PokemonContainer>
 					) : (
-						<PokemonContainer>
+						<PokemonContainer
+							style={{ padding: `${cardHeight}px` }}
+						>
 							<TotalResult>
 								{pokemonFiltrerByType.length} résultats.
 							</TotalResult>
@@ -258,6 +257,7 @@ export default function Pokemon() {
 						pokemonId={pokemonId}
 						setPokemonId={setPokemonId}
 						cardPosition={cardPosition}
+						setCardHeight={setCardHeight}
 					/>
 				</PokemonGlobalContainer>
 			)}

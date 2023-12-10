@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useFetch } from "../../utils/hooks";
 import { Link, useParams } from "react-router-dom";
@@ -207,6 +207,7 @@ export default function Cards({
 	pokemonId,
 	setPokemonId,
 	cardPosition,
+	setCardHeight,
 }) {
 	const { data, isLoading, error } = useFetch(
 		`https://pokebuildapi.fr/api/v1/pokemon/${pokemonId}`,
@@ -230,6 +231,13 @@ export default function Cards({
 
 	type?.forEach((el) => themeByType.push(theme[`${el.name}`])); // définition des couleurs en fonction du type
 
+	//---------------------------------------------
+	const cardRef = useRef();
+
+	useEffect(() => {
+		setCardHeight(cardRef?.current?.offsetHeight);
+	}, [closeCard]);
+
 	return (
 		<div>
 			{error ? (
@@ -241,6 +249,7 @@ export default function Cards({
 			) : (
 				<CardGlobalSection className={!closeCard && "active"}>
 					<PokemonCard
+						ref={cardRef}
 						style={{
 							top: cardPosition.pageY - cardPosition.clientY,
 						}}
