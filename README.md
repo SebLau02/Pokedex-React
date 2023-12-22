@@ -11,7 +11,7 @@ Pokedex: accès à toutes les données de tout les pokemons des 8 premières gé
 Voici mon premier projet avec react. J'ai préféré commencé par quelques chose qui m'était familier. Les données proviennent d'une api (https://pokebuildapi.fr/api/v1) gratuite.
 J'ai utilisé react et quelques animations ont été faites avec gsap.
 
-Vous pouvez le visiter [ici](https://seblau02.github.io/Pokedex-React/)
+Je vous laisse le découvrir [ici](https://seblau02.github.io/Pokedex-React/)
 
 ## En
 
