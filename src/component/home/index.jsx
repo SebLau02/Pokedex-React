@@ -6,18 +6,21 @@ import gsap from "gsap";
 //********** styled component **********
 
 const HomeWrapper = styled.div`
-	width: 100vw;
+	width: 100%;
 	height: 100vh;
 	overflow: hidden;
 `;
 
 const Button = styled.span`
 	display: block;
+
 	width: 50%;
 	height: 50%;
 	border-radius: 50%;
+
 	background: #ffffff;
-	box-shadow: 5px 5px 21px #262626, -5px -5px 21px #0a0a0a;
+
+	box-shadow: 5px 5px 18px #262626, -5px -5px 18px #0a0a0a;
 
 	:active {
 		box-shadow: 5px 5px 21px #cccccc, -5px -5px 21px #757575;
@@ -26,30 +29,30 @@ const Button = styled.span`
 	}
 `;
 const PokeButton = styled.div`
-	background: #ffffff;
-	width: 200px;
-	height: 200px;
-	border-radius: 50%;
+	width: 20vw;
+	height: 20vw;
+	min-height: 150px;
+	min-width: 150px;
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border: 2rem solid black;
+
+	border: 2vh solid #161616;
+	border-radius: 50%;
+
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	z-index: 10;
 
-	@media (max-width: 425px) {
-		width: 150px;
-		height: 150px;
-		border: 15px solid black;
-	}
+	background: #ffffff;
 `;
-const StyledSpanBackground = styled.span`
-	display: block;
+const PokeballPart = styled.div`
 	height: 50%;
 	width: 100%;
+
 	background: linear-gradient(80deg, #871a22 10%, #ad4e56 70%, #a71f2a 98%);
 `;
 
@@ -106,19 +109,19 @@ export default function Home() {
 
 	return (
 		<HomeWrapper>
-			<StyledSpanBackground
-				style={{ borderBottom: "2rem solid black" }}
+			<PokeballPart
+				style={{ borderBottom: "1vh solid #161616" }}
 				ref={cardRefTop}
-			></StyledSpanBackground>
+			></PokeballPart>
 
 			<PokeButton ref={buttonRef}>
 				<Button onClick={changeState}></Button>
 			</PokeButton>
 
-			<StyledSpanBackground
-				style={{ borderTop: "2rem solid black" }}
+			<PokeballPart
+				style={{ borderTop: "1vh solid #161616" }}
 				ref={cardRefBottom}
-			></StyledSpanBackground>
+			></PokeballPart>
 		</HomeWrapper>
 	);
 }
