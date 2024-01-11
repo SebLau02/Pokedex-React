@@ -14,16 +14,17 @@ const HomeWrapper = styled.div`
 const Button = styled.span`
 	display: block;
 
-	width: 50%;
-	height: 50%;
+	width: 25%;
+	height: 25%;
 	border-radius: 50%;
 
 	background: #ffffff;
 
-	box-shadow: 5px 5px 18px #262626, -5px -5px 18px #0a0a0a;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+		rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+		rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 
 	:active {
-		box-shadow: 5px 5px 21px #cccccc, -5px -5px 21px #757575;
 		background: #ff0000;
 		opacity: 0.2;
 	}

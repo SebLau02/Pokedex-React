@@ -191,9 +191,14 @@ const CardGlobalSection = styled.section`
 	}
 `;
 
-const EvolutionLink = styled.div`
+const EvolutionLink = styled.button`
 	color: ${colors.green};
 	text-decoration: none;
+
+	background: none;
+	border: none;
+
+	font-size: inherit;
 `;
 
 const NavButton = styled.button`
