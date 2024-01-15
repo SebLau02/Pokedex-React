@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 import Loader from "../loader";
 import SearchBar from "../searchBar";
@@ -22,8 +21,6 @@ const PokemonContainer = styled.section`
 	align-items: center;
 	flex-wrap: wrap;
 
-	margin: 30px auto 0;
-	padding: auto;
 	padding: 0 10px;
 `;
 const ImagePokemon = styled.img`
@@ -91,23 +88,16 @@ const TotalResult = styled.p`
 `;
 
 export default function Pokemon() {
-	const [cardHeight, setCardHeight] = useState(0);
-
-	//********** state filtre pour les générations choisie **********
+	const [selectedGeneration, setSelectedGeneration] = useState("Tout");
+	const [filterName, setFilterName] = useState("");
 
 	let apiUrl = "https://pokebuildapi.fr/api/v1/pokemon";
 
-	//********** je gardes en mémoire local la génération choisi pour le récupérer après chaque premier chargement de la page **********
-
-	const [selectedGeneration, setSelectedGeneration] = useState("Tout");
-
-	//********** api call pour récuperer les pokémons **********
+	//********** appel de l'api pour récuperer les données pokémons **********
 
 	const { data, isLoading, error } = useFetch(apiUrl);
 
 	const [pokemonList, setPokemonList] = useState(Object.values(data));
-
-	const [filterName, setFilterName] = useState("");
 
 	useEffect(() => {
 		if (data) {
@@ -157,7 +147,7 @@ export default function Pokemon() {
 	const [scrollY, setScrollY] = useState(window.scrollY); //détecter si je scroll vers le bas ou haut
 	const [hiddenScroll, setHiddenScroll] = useState(false); //afficher / cacher navbar au scroll
 	const [pokemonId, setPokemonId] = useState(1); // id du pokemon choisi
-	const [cardPosition, setCardPosition] = useState({ pageY: 0, clientY: 0 }); // position du pokemon choisi
+	const [cardPosition, setCardPosition] = useState({ pageY: 0, clientY: 0 }); // position dans le vp du pokemon choisi
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -196,15 +186,14 @@ export default function Pokemon() {
 					/>
 
 					{filterType === "Tout" ? (
-						<PokemonContainer
-							style={{ paddingBottom: `${cardHeight}px` }}
-						>
+						<PokemonContainer>
 							<TotalResult className={hiddenScroll && "hidden"}>
 								{pokemonList.length} résultats.
 							</TotalResult>
 							{pokemonList.map((item) => (
 								<PokemonLink
 									key={`pokemon-${item.pokedexId}`}
+									data-testid={`${item.pokedexId}`}
 									onClick={(e) => {
 										setCloseCard(true);
 										setPokemonId(item.pokedexId);
@@ -217,15 +206,13 @@ export default function Pokemon() {
 									<ImagePokemon
 										key={item.pokedexId}
 										src={item.sprite}
-										alt="illustration de pokemon"
+										alt={item.name}
 									/>
 								</PokemonLink>
 							))}
 						</PokemonContainer>
 					) : (
-						<PokemonContainer
-							style={{ padding: `${cardHeight}px` }}
-						>
+						<PokemonContainer>
 							<TotalResult>
 								{pokemonFiltrerByType.length} résultats.
 							</TotalResult>
@@ -244,7 +231,7 @@ export default function Pokemon() {
 									<ImagePokemon
 										key={item.pokedexId}
 										src={item.sprite}
-										alt="illustration de pokemon"
+										alt={item.name}
 									/>
 								</PokemonLink>
 							))}
@@ -257,7 +244,6 @@ export default function Pokemon() {
 						pokemonId={pokemonId}
 						setPokemonId={setPokemonId}
 						cardPosition={cardPosition}
-						setCardHeight={setCardHeight}
 					/>
 				</PokemonGlobalContainer>
 			)}
