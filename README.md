@@ -19,7 +19,7 @@ This is my first react project. I decided to make a pokedex to practice in react
 
 Visit it [here](https://pokedex-react-phi-amber.vercel.app)
 
-### Technologies: React.JS, Node.Js, Greensock
+### Technologies: React.JS, Greensock
 
 ### Images
 
