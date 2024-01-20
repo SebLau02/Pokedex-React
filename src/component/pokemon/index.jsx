@@ -9,11 +9,9 @@ import Cards from "../card";
 import { useState, useEffect } from "react";
 import { useFetch } from "../../utils/hooks";
 
-import "./index.css";
-
 const PokemonContainer = styled.section`
 	max-width: 100vw;
-	min-height: 83vh;
+	min-height: 85vh;
 	height: auto;
 
 	display: flex;
@@ -88,6 +86,7 @@ const TotalResult = styled.p`
 `;
 
 export default function Pokemon() {
+	// variables pour les filtres
 	const [selectedGeneration, setSelectedGeneration] = useState("Tout");
 	const [filterName, setFilterName] = useState("");
 
@@ -148,15 +147,36 @@ export default function Pokemon() {
 	const [hiddenScroll, setHiddenScroll] = useState(false); //afficher / cacher navbar au scroll
 	const [pokemonId, setPokemonId] = useState(1); // id du pokemon choisi
 	const [cardPosition, setCardPosition] = useState({ pageY: 0, clientY: 0 }); // position dans le vp du pokemon choisi
+	const [listToDisplay, setListToDisplay] = useState(100); // nombre de pokémon à afficher (pour l'affichage dynamique)
+
+	const pokemonContainerRef = useRef();
 
 	useEffect(() => {
 		const handleScroll = () => {
+			// ici on vérifie si on scroll vers le bas ou le haut
+			// vers le bas on cache la navbar, vers le haut on l'affiche
+
 			if (window.scrollY <= scrollY) {
 				setHiddenScroll(false);
 				setScrollY(window.scrollY);
 			} else {
 				setHiddenScroll(true);
 				setScrollY(window.scrollY);
+			}
+
+			// permet de déterminer le nombre de pokémon à afficher
+			// par affichage conditionnel, lorsqu'on scroll jusqu'en bas on augment le nombre de pokémon affiché
+			// permet d'augmenter la performance en limitant la quantité de donnée à afficher
+
+			if (
+				window.innerHeight + document.documentElement.scrollTop - 121 >=
+				pokemonContainerRef.current.offsetHeight
+			) {
+				setListToDisplay((prevValue) => {
+					// Limiter la nouvelle valeur à 900
+					const newValue = prevValue + 40;
+					return newValue <= 900 ? newValue : 900;
+				});
 			}
 		};
 
@@ -167,6 +187,7 @@ export default function Pokemon() {
 		};
 	}, [scrollY]);
 
+	//---------------------------------------------
 	return (
 		<div>
 			{error ? (
@@ -186,30 +207,33 @@ export default function Pokemon() {
 					/>
 
 					{filterType === "Tout" ? (
-						<PokemonContainer>
+						<PokemonContainer ref={pokemonContainerRef}>
 							<TotalResult className={hiddenScroll && "hidden"}>
 								{pokemonList.length} résultats.
 							</TotalResult>
-							{pokemonList.map((item) => (
-								<PokemonLink
-									key={`pokemon-${item.pokedexId}`}
-									data-testid={`${item.pokedexId}`}
-									onClick={(e) => {
-										setCloseCard(true);
-										setPokemonId(item.pokedexId);
-										setCardPosition({
-											pageY: e.pageY,
-											clientY: e.clientY,
-										});
-									}}
-								>
-									<ImagePokemon
-										key={item.pokedexId}
-										src={item.sprite}
-										alt={item.name}
-									/>
-								</PokemonLink>
-							))}
+							{pokemonList.map(
+								(item, index) =>
+									index < listToDisplay && (
+										<PokemonLink
+											key={`pokemon-${item.pokedexId}`}
+											onClick={(e) => {
+												setCloseCard(true);
+												setPokemonId(item.pokedexId);
+												setCardPosition({
+													pageY: e.pageY,
+													clientY: e.clientY,
+												});
+											}}
+										>
+											<ImagePokemon
+												key={item.pokedexId}
+												src={item.sprite}
+												alt={item.name}
+												loading="lazy"
+											/>
+										</PokemonLink>
+									),
+							)}
 						</PokemonContainer>
 					) : (
 						<PokemonContainer>
@@ -232,6 +256,7 @@ export default function Pokemon() {
 										key={item.pokedexId}
 										src={item.sprite}
 										alt={item.name}
+										loading="lazy"
 									/>
 								</PokemonLink>
 							))}
