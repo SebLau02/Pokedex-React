@@ -169,7 +169,7 @@ export default function Pokemon() {
 			// permet d'augmenter la performance en limitant la quantité de donnée à afficher
 
 			if (
-				window.innerHeight + document.documentElement.scrollTop - 121 >=
+				window.innerHeight + document.documentElement.scrollTop - 48 >=
 				pokemonContainerRef.current.offsetHeight
 			) {
 				setListToDisplay((prevValue) => {
@@ -178,6 +178,10 @@ export default function Pokemon() {
 					return newValue <= 900 ? newValue : 900;
 				});
 			}
+			console.log(
+				window.innerHeight + document.documentElement.scrollTop - 48,
+				pokemonContainerRef.current.offsetHeight,
+			);
 		};
 
 		window.addEventListener("scroll", handleScroll);
